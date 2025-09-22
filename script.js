@@ -74,40 +74,44 @@ function updateCart() {
       <span>${item.name} (x${item.quantity})</span>
       <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
       <div>
-        <button onclick="decreaseHandler(event, '${item.id}')">-</button>
-        <button onclick="increaseHandler(event, '${item.id}')">+</button>
+        <button class="decrease" data-id="${item.id}">-</button>
+        <button class="increase" data-id="${item.id}">+</button>
       </div>
     `;
     cartItemsContainer.appendChild(div);
+  });
+
+  // Attach events for - and +, and stop propagation
+  document.querySelectorAll(".decrease").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      removeFromCart(e.target.dataset.id);
+    });
+  });
+
+  document.querySelectorAll(".increase").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      increaseQuantity(e.target.dataset.id);
+    });
   });
 
   cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartTotal.textContent = `Total: $${total.toFixed(2)}`;
 }
 
-// Button handlers to stop cart from closing
-function decreaseHandler(e, id) {
-  e.stopPropagation();
-  removeFromCart(id);
-}
-
-function increaseHandler(e, id) {
-  e.stopPropagation();
-  increaseQuantity(id);
-}
-
-// Toggle cart dropdown (only when cart icon is clicked)
+// Toggle cart dropdown (open/close on icon click)
 document.querySelector(".cart-container").addEventListener("click", (e) => {
-  if (e.target.closest("#cartDropdown")) return; // ignore clicks inside
+  if (e.target.closest("#cartDropdown")) return; // ignore clicks inside cart
   cartDropdown.classList.toggle("show");
 });
 
-// Prevent clicks inside the cart from closing it
+// Prevent clicks inside cart from closing it
 cartDropdown.addEventListener("click", (e) => {
   e.stopPropagation();
 });
 
-// Close cart when clicking outside
+// Close cart only when clicking outside
 document.addEventListener("click", (e) => {
   if (!e.target.closest(".cart-container")) {
     cartDropdown.classList.remove("show");
