@@ -1,74 +1,72 @@
-// Dark mode toggle
-const toggleBtn = document.getElementById("darkToggle");
-toggleBtn.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  localStorage.setItem("theme", document.body.classList.contains("dark") ? "dark" : "light");
-});
-
-// Keep theme on reload
-if (localStorage.getItem("theme") === "dark") {
-  document.body.classList.add("dark");
-}
-
-// Cart logic
-const addCartBtns = document.querySelectorAll(".add-cart");
+// Elements
 const cartCount = document.getElementById("cartCount");
 const cartDropdown = document.getElementById("cartDropdown");
 const cartItemsContainer = document.getElementById("cartItems");
 const cartTotal = document.getElementById("cartTotal");
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
+const darkToggle = document.getElementById("darkToggle");
+
+let cart = [];
+let total = 0;
+
+// Handle "Add to Cart" button clicks
+document.querySelectorAll(".add-cart").forEach(button => {
+  button.addEventListener("click", (e) => {
+    const productCard = e.target.closest(".product-card");
+
+    const product = {
+      id: productCard.dataset.id,
+      name: productCard.dataset.name,
+      price: parseFloat(productCard.dataset.price),
+      img: productCard.dataset.img,
+      quantity: 1
+    };
+
+    addToCart(product);
+  });
+});
+
+// Add item to cart
+function addToCart(product) {
+  const existing = cart.find(item => item.id === product.id);
+
+  if (existing) {
+    existing.quantity++;
+  } else {
+    cart.push(product);
+  }
+
+  updateCart();
+}
 
 // Update cart UI
 function updateCart() {
-  cartCount.textContent = cart.length;
   cartItemsContainer.innerHTML = "";
-  let total = 0;
+  total = 0;
 
-  cart.forEach((item, index) => {
-    total += parseFloat(item.price);
+  cart.forEach(item => {
+    total += item.price * item.quantity;
 
     const div = document.createElement("div");
     div.classList.add("cart-item");
     div.innerHTML = `
-      <span>${item.name} - $${item.price}</span>
-      <button data-index="${index}">x</button>
+      <img src="${item.img}" alt="${item.name}" width="40">
+      <span>${item.name} (x${item.quantity})</span>
+      <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
     `;
     cartItemsContainer.appendChild(div);
   });
 
+  cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartTotal.textContent = `Total: $${total.toFixed(2)}`;
-  localStorage.setItem("cart", JSON.stringify(cart));
 }
 
-// Add to cart
-addCartBtns.forEach(btn => {
-  btn.addEventListener("click", () => {
-    const product = btn.parentElement;
-    const item = {
-      id: product.dataset.id,
-      name: product.dataset.name,
-      price: product.dataset.price,
-      img: product.dataset.img
-    };
-    cart.push(item);
-    updateCart();
-  });
-});
-
-// Remove from cart
-cartItemsContainer.addEventListener("click", (e) => {
-  if (e.target.tagName === "BUTTON") {
-    const index = e.target.dataset.index;
-    cart.splice(index, 1);
-    updateCart();
-  }
-});
-
-// Toggle cart dropdown
+// Toggle cart dropdown on click
 document.querySelector(".cart-container").addEventListener("click", () => {
-  cartDropdown.style.display =
-    cartDropdown.style.display === "block" ? "none" : "block";
+  cartDropdown.classList.toggle("show");
 });
 
-// Initialize on load
-updateCart();
+// Dark mode toggle
+darkToggle.addEventListener("click", () => {
+  document.body.classList.toggle("dark");
+  darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
+});
