@@ -4,26 +4,57 @@ const cartDropdown = document.getElementById("cartDropdown");
 const cartItemsContainer = document.getElementById("cartItems");
 const cartTotal = document.getElementById("cartTotal");
 const darkToggle = document.getElementById("darkToggle");
+const productList = document.getElementById("productList");
 
 let cart = [];
 let total = 0;
 
-// Handle "Add to Cart" button clicks
-document.querySelectorAll(".add-cart").forEach(button => {
-  button.addEventListener("click", (e) => {
-    const productCard = e.target.closest(".product-card");
+// Fetch products from FakeStoreAPI
+async function loadProducts() {
+  try {
+    const res = await fetch("https://fakestoreapi.com/products");
+    const products = await res.json();
 
-    const product = {
-      id: productCard.dataset.id,
-      name: productCard.dataset.name,
-      price: parseFloat(productCard.dataset.price),
-      img: productCard.dataset.img,
-      quantity: 1
-    };
+    productList.innerHTML = "";
+    products.forEach(product => {
+      const div = document.createElement("div");
+      div.classList.add("product-card");
+      div.dataset.id = product.id;
+      div.dataset.name = product.title;
+      div.dataset.price = product.price;
+      div.dataset.img = product.image;
 
-    addToCart(product);
-  });
-});
+      div.innerHTML = `
+        <img src="${product.image}" alt="${product.title}" width="100">
+        <h3>${product.title}</h3>
+        <p>$${product.price}</p>
+        <button class="add-cart">Add to Cart</button>
+      `;
+
+      productList.appendChild(div);
+    });
+
+    // Attach event listeners to new buttons
+    document.querySelectorAll(".add-cart").forEach(button => {
+      button.addEventListener("click", (e) => {
+        const productCard = e.target.closest(".product-card");
+
+        const product = {
+          id: productCard.dataset.id,
+          name: productCard.dataset.name,
+          price: parseFloat(productCard.dataset.price),
+          img: productCard.dataset.img,
+          quantity: 1
+        };
+
+        addToCart(product);
+      });
+    });
+  } catch (error) {
+    console.error("Error loading products:", error);
+    productList.innerHTML = "<p>⚠️ Failed to load products.</p>";
+  }
+}
 
 // Add item to cart
 function addToCart(product) {
@@ -75,7 +106,6 @@ function updateCart() {
 
 // Toggle cart dropdown (only when cart icon is clicked)
 document.querySelector(".cart-container").addEventListener("click", (e) => {
-  // Ignore clicks inside the dropdown so it stays open
   if (e.target.closest("#cartDropdown")) return;
   cartDropdown.classList.toggle("show");
 });
@@ -92,3 +122,6 @@ darkToggle.addEventListener("click", () => {
   document.body.classList.toggle("dark");
   darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
 });
+
+// Load products on page start
+loadProducts();
