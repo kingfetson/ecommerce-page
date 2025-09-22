@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>E-commerce Product Page</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <div class="logo">🛒 MyShop</div>
+    <ul class="nav-links">
+      <li><a href="#">Home</a></li>
+      <li><a href="#products">Products</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+    <div class="cart-icon">
+      <button id="darkToggle">🌙</button>
+      <span id="cartCount">0</span> 🛍️
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <header class="hero">
+    <h1>Welcome to MyShop</h1>
+    <p>Your one-stop shop for awesome products</p>
+  </header>
+
+  <!-- Product Grid -->
+  <section class="products" id="products">
+    <h2>Featured Products</h2>
+    <div class="product-grid">
+      <div class="product-card" data-id="1" data-name="Running Shoes" data-price="50" data-img="https://source.unsplash.com/300x200/?shoes">
+        <img src="https://source.unsplash.com/300x200/?shoes" alt="Running Shoes">
+        <h3>Running Shoes</h3>
+        <p>$50.00</p>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+      <div class="product-card" data-id="2" data-name="Smart Watch" data-price="120" data-img="https://source.unsplash.com/300x200/?watch">
+        <img src="https://source.unsplash.com/300x200/?watch" alt="Smart Watch">
+        <h3>Smart Watch</h3>
+        <p>$120.00</p>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+      <div class="product-card" data-id="3" data-name="Headphones" data-price="80" data-img="https://source.unsplash.com/300x200/?headphones">
+        <img src="https://source.unsplash.com/300x200/?headphones" alt="Headphones">
+        <h3>Headphones</h3>
+        <p>$80.00</p>
+        <button class="add-cart">Add to Cart</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cart Section -->
+  <section class="cart-section" id="cart">
+    <h2>Your Cart</h2>
+    <div id="cartItems"></div>
+    <p id="cartTotal">Total: $0</p>
+  </section>
+
+  <script src="script.js"></script>
+</body>
+</html>
