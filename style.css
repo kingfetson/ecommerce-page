@@ -53,7 +53,9 @@ html {
 
 .nav-actions {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+  color: white;
 }
 
 .nav-actions button {
@@ -67,7 +69,7 @@ html {
 .hero {
   text-align: center;
   padding: 4rem 2rem;
-  background: url('https://source.unsplash.com/1600x600/?restaurant,food') no-repeat center center/cover;
+  background: url('https://source.unsplash.com/1600x600/?shopping,store') no-repeat center center/cover;
   color: white;
 }
 
@@ -76,43 +78,24 @@ html {
   margin-bottom: 1rem;
 }
 
-/* Menu */
-.menu {
+/* Products */
+.products {
   padding: 2rem;
   text-align: center;
 }
 
-.menu h2 {
+.products h2 {
   margin-bottom: 1rem;
 }
 
-.category-filter {
-  margin-bottom: 1rem;
-}
-
-.category-filter button {
-  margin: 0.2rem;
-  padding: 0.5rem 1rem;
-  border: none;
-  background: #4CAF50;
-  color: white;
-  cursor: pointer;
-  border-radius: 4px;
-  transition: background 0.3s;
-}
-
-.category-filter button:hover {
-  background: #45a049;
-}
-
-.menu-items {
+.product-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
 }
 
-.menu-item {
+.product-card {
   background: white;
   border-radius: 8px;
   padding: 1rem;
@@ -120,22 +103,22 @@ html {
   transition: transform 0.2s;
 }
 
-.menu-item:hover {
+.product-card:hover {
   transform: translateY(-5px);
 }
 
-.menu-item img {
+.product-card img {
   width: 100%;
   height: 150px;
   object-fit: cover;
   border-radius: 6px;
 }
 
-.menu-item h3 {
+.product-card h3 {
   margin: 0.5rem 0;
 }
 
-.menu-item p {
+.product-card p {
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
 }
@@ -159,22 +142,6 @@ html {
   font-size: 0.9rem;
 }
 
-.footer .social-links {
-  margin-top: 0.5rem;
-}
-
-.footer .social-links a {
-  margin: 0 0.5rem;
-  text-decoration: none;
-  color: #4CAF50;
-  font-size: 0.9rem;
-  transition: color 0.3s;
-}
-
-.footer .social-links a:hover {
-  color: #81C784;
-}
-
 /* Dark Mode */
 body.dark {
   background: #222;
@@ -185,11 +152,7 @@ body.dark .navbar {
   background: #333;
 }
 
-body.dark .category-filter button {
-  background: #555;
-}
-
-body.dark .menu-item {
+body.dark .product-card {
   background: #333;
   color: #eee;
 }
@@ -197,12 +160,4 @@ body.dark .menu-item {
 body.dark .footer {
   background: #111;
   color: #ddd;
-}
-
-body.dark .footer .social-links a {
-  color: #66BB6A;
-}
-
-body.dark .footer .social-links a:hover {
-  color: #A5D6A7;
 }
