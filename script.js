@@ -38,10 +38,24 @@ function addToCart(product) {
   updateCart();
 }
 
-// Remove item from cart
+// Remove item completely
 function removeFromCart(id) {
   cart = cart.filter(item => item.id !== id);
   updateCart();
+}
+
+// Change item quantity
+function changeQuantity(id, delta) {
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+
+  item.quantity += delta;
+
+  if (item.quantity <= 0) {
+    removeFromCart(id);
+  } else {
+    updateCart();
+  }
 }
 
 // Update cart UI
@@ -56,14 +70,27 @@ function updateCart() {
     div.classList.add("cart-item");
     div.innerHTML = `
       <img src="${item.img}" alt="${item.name}" width="40">
-      <span>${item.name} (x${item.quantity})</span>
+      <span>${item.name}</span>
+      <div class="quantity-controls">
+        <button class="qty-btn" data-id="${item.id}" data-action="decrease">➖</button>
+        <span>${item.quantity}</span>
+        <button class="qty-btn" data-id="${item.id}" data-action="increase">➕</button>
+      </div>
       <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
       <button class="remove-btn" data-id="${item.id}">❌</button>
     `;
     cartItemsContainer.appendChild(div);
   });
 
-  // Attach remove button listeners
+  // Attach button listeners
+  document.querySelectorAll(".qty-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const id = e.target.dataset.id;
+      const action = e.target.dataset.action;
+      changeQuantity(id, action === "increase" ? 1 : -1);
+    });
+  });
+
   document.querySelectorAll(".remove-btn").forEach(btn => {
     btn.addEventListener("click", (e) => {
       const id = e.target.dataset.id;
