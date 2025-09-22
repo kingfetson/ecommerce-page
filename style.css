@@ -206,3 +206,7 @@ body.dark .cart-dropdown {
   background: #333;
   color: white;
 }
+/* Ensure cart dropdown can be toggled */
+.cart-dropdown.show {
+  display: block;
+}
