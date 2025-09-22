@@ -38,24 +38,15 @@ function addToCart(product) {
   updateCart();
 }
 
-// Remove ONE quantity of an item
-function removeFromCart(id) {
-  const product = cart.find(item => item.id === id);
-
-  if (product) {
-    product.quantity--;
-
-    if (product.quantity === 0) {
-      cart = cart.filter(item => item.id !== id);
+// Remove item from cart
+function removeFromCart(productId) {
+  const item = cart.find(p => p.id === productId);
+  if (item) {
+    item.quantity--;
+    if (item.quantity <= 0) {
+      cart = cart.filter(p => p.id !== productId);
     }
   }
-
-  updateCart();
-}
-
-// Remove ALL of a product
-function deleteFromCart(id) {
-  cart = cart.filter(item => item.id !== id);
   updateCart();
 }
 
@@ -73,35 +64,27 @@ function updateCart() {
       <img src="${item.img}" alt="${item.name}" width="40">
       <span>${item.name} (x${item.quantity})</span>
       <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
-      <button class="remove-item" data-id="${item.id}">➖</button>
-      <button class="delete-item" data-id="${item.id}">🗑️</button>
+      <button onclick="removeFromCart('${item.id}')">-</button>
     `;
     cartItemsContainer.appendChild(div);
   });
 
   cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
   cartTotal.textContent = `Total: $${total.toFixed(2)}`;
-
-  // Attach event listeners for remove buttons
-  document.querySelectorAll(".remove-item").forEach(button => {
-    button.addEventListener("click", (e) => {
-      const id = e.target.dataset.id;
-      removeFromCart(id);
-    });
-  });
-
-  // Attach event listeners for delete buttons
-  document.querySelectorAll(".delete-item").forEach(button => {
-    button.addEventListener("click", (e) => {
-      const id = e.target.dataset.id;
-      deleteFromCart(id);
-    });
-  });
 }
 
-// Toggle cart dropdown on click
-document.querySelector(".cart-container").addEventListener("click", () => {
+// Toggle cart dropdown (only when cart icon is clicked)
+document.querySelector(".cart-container").addEventListener("click", (e) => {
+  // Ignore clicks inside the dropdown so it stays open
+  if (e.target.closest("#cartDropdown")) return;
   cartDropdown.classList.toggle("show");
+});
+
+// Close cart when clicking outside
+document.addEventListener("click", (e) => {
+  if (!e.target.closest(".cart-container")) {
+    cartDropdown.classList.remove("show");
+  }
 });
 
 // Dark mode toggle
