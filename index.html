@@ -16,9 +16,17 @@
       <li><a href="#about">About</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
-    <div class="cart-icon">
-      <button id="darkToggle">🌙</button>
-      <span id="cartCount">0</span> 🛍️
+    <div class="nav-actions">
+      <button id="darkToggle" class="dark-toggle">🌙</button>
+      <div class="cart-container">
+        <span id="cartCount">0</span> 🛍️
+        <!-- Cart Dropdown -->
+        <div class="cart-dropdown" id="cartDropdown">
+          <h3>Your Cart</h3>
+          <div id="cartItems"></div>
+          <p id="cartTotal">Total: $0</p>
+        </div>
+      </div>
     </div>
   </nav>
 
@@ -51,27 +59,6 @@
         <button class="add-cart">Add to Cart</button>
       </div>
     </div>
-  </section>
-
-  <!-- Cart Section -->
-  <section class="cart-section" id="cart">
-    <h2>Your Cart</h2>
-    <table id="cartItems">
-      <thead>
-        <tr>
-          <th>Image</th>
-          <th>Product</th>
-          <th>Price</th>
-          <th>Qty</th>
-          <th>Remove</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Items will be inserted dynamically -->
-      </tbody>
-    </table>
-    <p id="cartTotal">Total: $0</p>
-    <button id="clearCart" class="clear-cart">🗑️ Clear Cart</button>
   </section>
 
   <script src="script.js"></script>
