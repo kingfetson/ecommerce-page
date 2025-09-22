@@ -1,0 +1,62 @@
+/* Existing styles from before... */
+
+/* Cart Icon */
+.cart-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: white;
+  font-size: 1rem;
+}
+
+/* Add to Cart Button */
+.add-cart {
+  margin-top: 0.5rem;
+  padding: 0.5rem 1rem;
+  background: #ff9800;
+  border: none;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.add-cart:hover {
+  background: #e68900;
+}
+
+/* Cart Section */
+.cart-section {
+  padding: 2rem;
+  background: #fafafa;
+}
+
+#cartItems {
+  display: grid;
+  gap: 1rem;
+  margin: 1rem 0;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.cart-item img {
+  width: 60px;
+  border-radius: 5px;
+}
+
+.cart-item button {
+  padding: 0.3rem 0.7rem;
+  border: none;
+  background: red;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
