@@ -38,6 +38,12 @@ function addToCart(product) {
   updateCart();
 }
 
+// Remove item from cart
+function removeFromCart(id) {
+  cart = cart.filter(item => item.id !== id);
+  updateCart();
+}
+
 // Update cart UI
 function updateCart() {
   cartItemsContainer.innerHTML = "";
@@ -52,8 +58,17 @@ function updateCart() {
       <img src="${item.img}" alt="${item.name}" width="40">
       <span>${item.name} (x${item.quantity})</span>
       <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
+      <button class="remove-btn" data-id="${item.id}">❌</button>
     `;
     cartItemsContainer.appendChild(div);
+  });
+
+  // Attach remove button listeners
+  document.querySelectorAll(".remove-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      const id = e.target.dataset.id;
+      removeFromCart(id);
+    });
   });
 
   cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
