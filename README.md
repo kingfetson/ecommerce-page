@@ -29,11 +29,18 @@ A responsive **E-commerce Product Page** built with **HTML, CSS, and JavaScript*
 
 ---
 
-## 🛠️ Built With
-- **HTML5**
-- **CSS3 (Flexbox + Grid)**
-- **Vanilla JavaScript**
-- **LocalStorage API**
+📸 Preview
+
+🛠️ Tech Stack
+---
+
+HTML5
+
+CSS3 (Flexbox + Grid)
+
+JavaScript (ES6+)
+
+LocalStorage API
 
 ---
 
