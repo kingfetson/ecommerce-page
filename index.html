@@ -56,8 +56,22 @@
   <!-- Cart Section -->
   <section class="cart-section" id="cart">
     <h2>Your Cart</h2>
-    <div id="cartItems"></div>
+    <table id="cartItems">
+      <thead>
+        <tr>
+          <th>Image</th>
+          <th>Product</th>
+          <th>Price</th>
+          <th>Qty</th>
+          <th>Remove</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Items will be inserted dynamically -->
+      </tbody>
+    </table>
     <p id="cartTotal">Total: $0</p>
+    <button id="clearCart" class="clear-cart">🗑️ Clear Cart</button>
   </section>
 
   <script src="script.js"></script>
