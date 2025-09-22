@@ -50,15 +50,6 @@ function removeFromCart(productId) {
   updateCart();
 }
 
-// Increase item quantity
-function increaseQuantity(productId) {
-  const item = cart.find(p => p.id === productId);
-  if (item) {
-    item.quantity++;
-  }
-  updateCart();
-}
-
 // Update cart UI
 function updateCart() {
   cartItemsContainer.innerHTML = "";
@@ -73,10 +64,7 @@ function updateCart() {
       <img src="${item.img}" alt="${item.name}" width="40">
       <span>${item.name} (x${item.quantity})</span>
       <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
-      <div>
-        <button onclick="decreaseHandler(event, '${item.id}')">-</button>
-        <button onclick="increaseHandler(event, '${item.id}')">+</button>
-      </div>
+      <button onclick="removeFromCart('${item.id}')">-</button>
     `;
     cartItemsContainer.appendChild(div);
   });
@@ -85,26 +73,11 @@ function updateCart() {
   cartTotal.textContent = `Total: $${total.toFixed(2)}`;
 }
 
-// Button handlers to stop cart from closing
-function decreaseHandler(e, id) {
-  e.stopPropagation();
-  removeFromCart(id);
-}
-
-function increaseHandler(e, id) {
-  e.stopPropagation();
-  increaseQuantity(id);
-}
-
 // Toggle cart dropdown (only when cart icon is clicked)
 document.querySelector(".cart-container").addEventListener("click", (e) => {
-  if (e.target.closest("#cartDropdown")) return; // ignore clicks inside
+  // Ignore clicks inside the dropdown so it stays open
+  if (e.target.closest("#cartDropdown")) return;
   cartDropdown.classList.toggle("show");
-});
-
-// Prevent clicks inside the cart from closing it
-cartDropdown.addEventListener("click", (e) => {
-  e.stopPropagation();
 });
 
 // Close cart when clicking outside
