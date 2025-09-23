@@ -4,7 +4,7 @@ const cartDropdown = document.getElementById("cartDropdown");
 const cartItemsContainer = document.getElementById("cartItems");
 const cartTotal = document.getElementById("cartTotal");
 const darkToggle = document.getElementById("darkToggle");
-const productList = document.getElementById("productList");
+const productGrid = document.getElementById("productGrid");
 
 let cart = [];
 let total = 0;
@@ -15,7 +15,8 @@ async function loadProducts() {
     const res = await fetch("https://fakestoreapi.com/products");
     const products = await res.json();
 
-    productList.innerHTML = "";
+    productGrid.innerHTML = ""; // clear loading text
+
     products.forEach(product => {
       const div = document.createElement("div");
       div.classList.add("product-card");
@@ -25,16 +26,16 @@ async function loadProducts() {
       div.dataset.img = product.image;
 
       div.innerHTML = `
-        <img src="${product.image}" alt="${product.title}" width="100">
+        <img src="${product.image}" alt="${product.title}">
         <h3>${product.title}</h3>
-        <p>$${product.price}</p>
+        <p>$${product.price.toFixed(2)}</p>
         <button class="add-cart">Add to Cart</button>
       `;
 
-      productList.appendChild(div);
+      productGrid.appendChild(div);
     });
 
-    // Attach event listeners to new buttons
+    // Attach add-to-cart events after products load
     document.querySelectorAll(".add-cart").forEach(button => {
       button.addEventListener("click", (e) => {
         const productCard = e.target.closest(".product-card");
@@ -50,9 +51,10 @@ async function loadProducts() {
         addToCart(product);
       });
     });
+
   } catch (error) {
+    productGrid.innerHTML = "<p>⚠️ Failed to load products. Try again later.</p>";
     console.error("Error loading products:", error);
-    productList.innerHTML = "<p>⚠️ Failed to load products.</p>";
   }
 }
 
@@ -69,7 +71,7 @@ function addToCart(product) {
   updateCart();
 }
 
-// Remove item from cart
+// Decrease quantity
 function removeFromCart(productId) {
   const item = cart.find(p => p.id === productId);
   if (item) {
@@ -77,6 +79,15 @@ function removeFromCart(productId) {
     if (item.quantity <= 0) {
       cart = cart.filter(p => p.id !== productId);
     }
+  }
+  updateCart();
+}
+
+// Increase quantity inside cart
+function increaseQuantity(productId) {
+  const item = cart.find(p => p.id === productId);
+  if (item) {
+    item.quantity++;
   }
   updateCart();
 }
@@ -93,9 +104,13 @@ function updateCart() {
     div.classList.add("cart-item");
     div.innerHTML = `
       <img src="${item.img}" alt="${item.name}" width="40">
-      <span>${item.name} (x${item.quantity})</span>
+      <span>${item.name}</span>
+      <div>
+        <button onclick="removeFromCart('${item.id}')">➖</button>
+        <span>${item.quantity}</span>
+        <button onclick="increaseQuantity('${item.id}')">➕</button>
+      </div>
       <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
-      <button onclick="removeFromCart('${item.id}')">-</button>
     `;
     cartItemsContainer.appendChild(div);
   });
@@ -106,7 +121,7 @@ function updateCart() {
 
 // Toggle cart dropdown (only when cart icon is clicked)
 document.querySelector(".cart-container").addEventListener("click", (e) => {
-  if (e.target.closest("#cartDropdown")) return;
+  if (e.target.closest("#cartDropdown")) return; // ignore clicks inside dropdown
   cartDropdown.classList.toggle("show");
 });
 
@@ -123,5 +138,5 @@ darkToggle.addEventListener("click", () => {
   darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
 });
 
-// Load products on page start
+// Load products on page load
 loadProducts();
