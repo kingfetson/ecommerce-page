@@ -1,87 +1,163 @@
-/* Global styles and overrides for Tailwind (minimal—Tailwind handles most) */
+/* RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
-
 body {
   font-family: Arial, sans-serif;
+  background: #f9f9f9;
+  color: #333;
   line-height: 1.6;
-  transition: background-color 0.3s, color 0.3s;
+  transition: background 0.3s, color 0.3s;
+}
+.dark {
+  background: #1a1a1a;
+  color: #f1f1f1;
 }
 
-/* Dark Mode (optional enhancement—toggles via JS) */
-body.dark {
-  background-color: #1f2937;
-  color: #f9fafb;
+/* HEADER */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #2c3e50;
+  color: white;
+}
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.dark-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+.cart-container {
+  position: relative;
+}
+.cart-btn {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: red;
+  color: white;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 0.8rem;
+  font-weight: bold;
+}
+.hidden {
+  display: none;
 }
 
-body.dark #cart-modal .bg-white {
-  background-color: #374151;
-  color: #f9fafb;
+/* SHOP */
+.shop {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1.5rem;
+  padding: 2rem;
 }
-
-body.dark #cart-modal .bg-gray-50 {
-  background-color: #4b5563;
-}
-
-body.dark .text-gray-500 {
-  color: #d1d5db;
-}
-
-body.dark .bg-gray-100 {
-  background-color: #1f2937;
-}
-
-/* Cart Badge (Tailwind override for consistency) */
-#cart-badge {
-  min-width: 20px;
-  text-align: center;
-}
-
-#cart-badge:not(.hidden) {
-  display: inline-block !important;
-}
-
-/* Modal Enhancements (ensure full coverage) */
-#cart-modal {
-  backdrop-filter: blur(4px);
-}
-
-#cart-modal .max-w-2xl {
-  max-width: 90vw;
-  max-height: 90vh;
-}
-
-/* Product Card Customizations (if needed beyond Tailwind) */
 .product-card {
-  transition: box-shadow 0.3s ease;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.2s;
 }
-
 .product-card:hover {
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  transform: translateY(-4px);
+}
+.product-card img {
+  height: 160px;
+  object-fit: contain;
+  margin-bottom: 0.8rem;
+}
+.product-card h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+.product-card p {
+  margin-bottom: 0.5rem;
+}
+.product-card button {
+  background: #3498db;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.product-card button:hover {
+  background: #2980b9;
 }
 
-/* Loading/Error Messages */
-.loading-message,
-.error-message {
-  @apply col-span-full text-center py-8 text-gray-500;
+/* MODAL */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 50;
+}
+.modal-content {
+  background: white;
+  width: 90%;
+  max-width: 500px;
+  border-radius: 10px;
+  padding: 1.5rem;
+  position: relative;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+.close-btn {
+  position: absolute;
+  right: 1rem;
+  top: 1rem;
+  border: none;
+  background: transparent;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+.cart-items {
+  margin: 1rem 0;
+}
+.cart-footer {
+  font-weight: bold;
+  text-align: right;
+  margin-top: 1rem;
 }
 
-.error-message {
-  @apply text-red-500 bg-red-50 p-4 rounded;
-  color: #dc2626;
-  background-color: #fef2f2;
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 1rem;
+  margin-top: 2rem;
+  background: #ecf0f1;
 }
 
-/* Dark mode for messages */
-body.dark .error-message {
-  background-color: #7f1d1d;
-  color: #fca5a5;
+/* DARK MODE STYLES */
+.dark .product-card {
+  background: #2c2c2c;
+  color: #f1f1f1;
 }
-
-/* Smooth scrolling */
-html {
-  scroll-behavior: smooth;
+.dark .modal-content {
+  background: #2c2c2c;
+  color: #f1f1f1;
+}
+.dark footer {
+  background: #2c2c2c;
+  color: #f1f1f1;
 }
