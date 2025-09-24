@@ -1,4 +1,3 @@
-css and html for this:
 // ENTIRE JS code, wrapped in DOMContentLoaded for safety
 document.addEventListener("DOMContentLoaded", function() {
   // Select elements
