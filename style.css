@@ -123,6 +123,21 @@ html {
   margin-bottom: 0.5rem;
 }
 
+.add-cart {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  transition: background 0.3s;
+}
+
+.add-cart:hover {
+  background: #45a049;
+}
+
 /* About + Contact */
 .about, .contact {
   padding: 2rem;
@@ -161,6 +176,15 @@ body.dark .footer {
   background: #111;
   color: #ddd;
 }
+
+body.dark .add-cart {
+  background: #45a049;
+}
+
+body.dark .add-cart:hover {
+  background: #4CAF50;
+}
+
 /* Cart dropdown */
 .cart-container {
   position: relative;
@@ -174,46 +198,83 @@ body.dark .footer {
   top: 2.5rem;
   background: white;
   color: black;
-  width: 250px;
+  width: 300px;
   padding: 1rem;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.2);
   z-index: 1000;
+  min-height: 200px;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.cart-dropdown.show {
+  display: block !important;
 }
 
 .cart-dropdown h3 {
   margin-bottom: 0.5rem;
 }
 
-.cart-item {
+.cart-header {
   display: flex;
   justify-content: space-between;
-  margin: 0.5rem 0;
-  font-size: 0.9rem;
+  align-items: center;
+  margin-bottom: 1rem;
 }
 
-.cart-item button {
-  background: red;
-  color: white;
+#close-cart {
+  background: none;
   border: none;
-  padding: 2px 6px;
-  border-radius: 4px;
   cursor: pointer;
-  font-size: 0.8rem;
+  font-size: 1.2rem;
+  color: #666;
+  transition: color 0.3s;
 }
 
-body.dark .cart-dropdown {
-  background: #333;
-  color: white;
+#close-cart:hover {
+  color: #red;
 }
-/* Ensure cart dropdown can be toggled */
-.cart-dropdown.show {
-  display: block;
+
+.cart-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
 }
+
+.cart-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.cart-item img {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 4px;
+  margin-right: 10px;
+}
+
+.cart-item h4 {
+  font-size: 0.9rem;
+  margin: 0 0 5px 0;
+  font-weight: bold;
+}
+
+.cart-item p {
+  font-size: 0.8rem;
+  color: #666;
+  margin: 0 0 5px 0;
+}
+
 .quantity-controls {
   display: flex;
   align-items: center;
   gap: 5px;
+  margin-top: 5px;
 }
 
 .qty-btn {
@@ -224,6 +285,7 @@ body.dark .cart-dropdown {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.8rem;
+  min-width: 20px;
 }
 
 .qty-btn:hover {
@@ -238,8 +300,81 @@ body.dark .cart-dropdown {
   border-radius: 4px;
   cursor: pointer;
   font-size: 0.8rem;
+  margin-left: 10px;
 }
 
 .remove-btn:hover {
   background: darkred;
+}
+
+.cart-total {
+  margin-top: 10px;
+  font-weight: bold;
+  text-align: right;
+}
+
+.empty-cart {
+  text-align: center;
+  color: #999;
+  font-style: italic;
+}
+
+body.dark .cart-dropdown {
+  background: #333;
+  color: white;
+}
+
+body.dark .cart-item {
+  border-bottom-color: #555;
+}
+
+body.dark .cart-item p {
+  color: #ccc;
+}
+
+body.dark .qty-btn {
+  background: #45a049;
+}
+
+body.dark .qty-btn:hover {
+  background: #4CAF50;
+}
+
+body.dark .remove-btn {
+  background: #cc0000;
+}
+
+body.dark .remove-btn:hover {
+  background: #990000;
+}
+
+body.dark .empty-cart {
+  color: #888;
+}
+
+/* Loading and Error Messages */
+.loading-message,
+.error-message {
+  grid-column: 1 / -1;
+  padding: 2rem;
+  text-align: center;
+  color: #666;
+  font-style: italic;
+}
+
+.error-message {
+  color: #d32f2f;
+  background: #ffebee;
+  border-radius: 4px;
+  margin: 1rem;
+}
+
+body.dark .loading-message,
+body.dark .error-message {
+  color: #ccc;
+}
+
+body.dark .error-message {
+  background: #440000;
+  color: #ffcccc;
 }
