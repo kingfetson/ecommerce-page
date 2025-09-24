@@ -1,142 +1,117 @@
-// Elements
-const cartCount = document.getElementById("cartCount");
-const cartDropdown = document.getElementById("cartDropdown");
-const cartItemsContainer = document.getElementById("cartItems");
-const cartTotal = document.getElementById("cartTotal");
-const darkToggle = document.getElementById("darkToggle");
-const productGrid = document.getElementById("productGrid");
+// Select elements
+const shop = document.getElementById("shop");
+const cartIcon = document.getElementById("cart-icon");
+const cartModal = document.getElementById("cart-modal");
+const closeCartBtn = document.getElementById("close-cart");
+const cartItemsContainer = document.getElementById("cart-items");
+const totalPriceElement = document.getElementById("total-price");
 
-let cart = [];
-let total = 0;
+let basket = [];
 
-// Fetch products from FakeStoreAPI
-async function loadProducts() {
+// Toggle cart modal
+cartIcon.addEventListener("click", () => {
+  cartModal.classList.toggle("hidden");
+});
+
+closeCartBtn.addEventListener("click", () => {
+  cartModal.classList.add("hidden");
+});
+
+// Fetch products from Fake Store API
+async function fetchProducts() {
   try {
     const res = await fetch("https://fakestoreapi.com/products");
     const products = await res.json();
-
-    productGrid.innerHTML = ""; // clear loading text
-
-    products.forEach(product => {
-      const div = document.createElement("div");
-      div.classList.add("product-card");
-      div.dataset.id = product.id;
-      div.dataset.name = product.title;
-      div.dataset.price = product.price;
-      div.dataset.img = product.image;
-
-      div.innerHTML = `
-        <img src="${product.image}" alt="${product.title}">
-        <h3>${product.title}</h3>
-        <p>$${product.price.toFixed(2)}</p>
-        <button class="add-cart">Add to Cart</button>
-      `;
-
-      productGrid.appendChild(div);
-    });
-
-    // Attach add-to-cart events after products load
-    document.querySelectorAll(".add-cart").forEach(button => {
-      button.addEventListener("click", (e) => {
-        const productCard = e.target.closest(".product-card");
-
-        const product = {
-          id: productCard.dataset.id,
-          name: productCard.dataset.name,
-          price: parseFloat(productCard.dataset.price),
-          img: productCard.dataset.img,
-          quantity: 1
-        };
-
-        addToCart(product);
-      });
-    });
-
-  } catch (error) {
-    productGrid.innerHTML = "<p>⚠️ Failed to load products. Try again later.</p>";
-    console.error("Error loading products:", error);
+    generateShop(products);
+  } catch (err) {
+    console.error("API fetch error:", err);
+    shop.innerHTML = "<p class='text-red-500'>Failed to load products. Try again later.</p>";
   }
+}
+
+// Generate product cards dynamically
+function generateShop(products) {
+  shop.innerHTML = products
+    .map((product) => {
+      return `
+        <div class="bg-white shadow rounded p-4 flex flex-col items-center">
+          <img src="${product.image}" alt="${product.title}" class="h-40 object-contain mb-2">
+          <h3 class="text-sm font-bold text-center mb-1">${product.title}</h3>
+          <p class="text-gray-500 text-sm mb-2">${product.category}</p>
+          <p class="font-semibold mb-2">$${product.price}</p>
+          <button onclick="addToCart(${product.id}, '${product.title.replace(/'/g, "\\'")}', ${product.price}, '${product.image}')" 
+            class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+            Add to Cart
+          </button>
+        </div>
+      `;
+    })
+    .join("");
 }
 
 // Add item to cart
-function addToCart(product) {
-  const existing = cart.find(item => item.id === product.id);
-
-  if (existing) {
-    existing.quantity++;
+function addToCart(id, title, price, image) {
+  let existingItem = basket.find((x) => x.id === id);
+  if (existingItem) {
+    existingItem.qty += 1;
   } else {
-    cart.push(product);
-  }
-
-  updateCart();
-}
-
-// Decrease quantity
-function removeFromCart(productId) {
-  const item = cart.find(p => p.id === productId);
-  if (item) {
-    item.quantity--;
-    if (item.quantity <= 0) {
-      cart = cart.filter(p => p.id !== productId);
-    }
-  }
-  updateCart();
-}
-
-// Increase quantity inside cart
-function increaseQuantity(productId) {
-  const item = cart.find(p => p.id === productId);
-  if (item) {
-    item.quantity++;
+    basket.push({ id, title, price, image, qty: 1 });
   }
   updateCart();
 }
 
 // Update cart UI
 function updateCart() {
-  cartItemsContainer.innerHTML = "";
-  total = 0;
+  cartItemsContainer.innerHTML = basket
+    .map((item) => {
+      return `
+        <div class="flex items-center justify-between border-b py-2">
+          <img src="${item.image}" alt="${item.title}" class="h-12 w-12 object-contain">
+          <div class="flex-1 px-2">
+            <h4 class="text-sm font-semibold">${item.title}</h4>
+            <p class="text-gray-600">$${item.price}</p>
+            <div class="flex items-center space-x-2 mt-1">
+              <button onclick="decreaseQty(${item.id})" class="bg-gray-300 px-2 rounded">-</button>
+              <span>${item.qty}</span>
+              <button onclick="increaseQty(${item.id})" class="bg-gray-300 px-2 rounded">+</button>
+            </div>
+          </div>
+          <button onclick="removeFromCart(${item.id})" class="text-red-500 font-bold">X</button>
+        </div>
+      `;
+    })
+    .join("");
 
-  cart.forEach(item => {
-    total += item.price * item.quantity;
-
-    const div = document.createElement("div");
-    div.classList.add("cart-item");
-    div.innerHTML = `
-      <img src="${item.img}" alt="${item.name}" width="40">
-      <span>${item.name}</span>
-      <div>
-        <button onclick="removeFromCart('${item.id}')">➖</button>
-        <span>${item.quantity}</span>
-        <button onclick="increaseQuantity('${item.id}')">➕</button>
-      </div>
-      <strong>$${(item.price * item.quantity).toFixed(2)}</strong>
-    `;
-    cartItemsContainer.appendChild(div);
-  });
-
-  cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
-  cartTotal.textContent = `Total: $${total.toFixed(2)}`;
+  // Calculate total price
+  let total = basket.reduce((acc, item) => acc + item.price * item.qty, 0);
+  totalPriceElement.textContent = `$${total.toFixed(2)}`;
 }
 
-// Toggle cart dropdown (only when cart icon is clicked)
-document.querySelector(".cart-container").addEventListener("click", (e) => {
-  if (e.target.closest("#cartDropdown")) return; // ignore clicks inside dropdown
-  cartDropdown.classList.toggle("show");
-});
-
-// Close cart when clicking outside
-document.addEventListener("click", (e) => {
-  if (!e.target.closest(".cart-container")) {
-    cartDropdown.classList.remove("show");
+// Increase quantity
+function increaseQty(id) {
+  let item = basket.find((x) => x.id === id);
+  if (item) {
+    item.qty += 1;
+    updateCart();
   }
-});
+}
 
-// Dark mode toggle
-darkToggle.addEventListener("click", () => {
-  document.body.classList.toggle("dark");
-  darkToggle.textContent = document.body.classList.contains("dark") ? "☀️" : "🌙";
-});
+// Decrease quantity
+function decreaseQty(id) {
+  let item = basket.find((x) => x.id === id);
+  if (item && item.qty > 1) {
+    item.qty -= 1;
+  } else {
+    basket = basket.filter((x) => x.id !== id);
+  }
+  updateCart();
+}
+
+// Remove item completely
+function removeFromCart(id) {
+  basket = basket.filter((x) => x.id !== id);
+  updateCart();
+}
 
 // Load products on page load
-loadProducts();
+fetchProducts();
