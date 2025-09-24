@@ -1,59 +1,113 @@
-// Wait for the DOM to be fully loaded before running anything
+// Full dynamic cart logic + dark mode, wrapped for DOM ready (no null errors)
 document.addEventListener("DOMContentLoaded", function() {
-  // Select elements (now safe—DOM is ready!)
+  // Select elements (DOM is loaded—safe!)
   const shop = document.getElementById("shop");
   const cartIcon = document.getElementById("cart-icon");
-  const cartModal = document.getElementById("cart-modal");
+  const cartDropdown = document.getElementById("cartDropdown");
   const closeCartBtn = document.getElementById("close-cart");
-  const cartItemsContainer = document.getElementById("cart-items");
-  const totalPriceElement = document.getElementById("total-price");
+  const cartItemsContainer = document.getElementById("cartItems");
+  const totalPriceElement = document.getElementById("cartTotal");
+  const cartCountElement = document.getElementById("cartCount");
+  const darkToggle = document.getElementById("darkToggle");
 
-  // Double-check elements exist (educational: Add this console.log for debugging)
-  if (!cartIcon) console.error("cart-icon element not found! Check your HTML IDs.");
-  if (!shop) console.error("shop element not found! Check your HTML IDs.");
-  // ... (add for others if needed)
+  // Debug log (remove after testing)
+  console.log("Elements loaded:", { 
+    shop, cartIcon, cartDropdown, closeCartBtn, cartItemsContainer, 
+    totalPriceElement, cartCountElement, darkToggle 
+  });
 
-  let basket = []; // Your cart array
+  // Safety checks
+  if (!shop) console.error("Shop element (#shop) not found! Add id='shop' to .product-grid in HTML.");
+  if (!cartIcon) console.error("Cart icon (#cart-icon) not found! Add id='cart-icon' to .cart-container.");
 
-  // Toggle cart modal (now on a real element!)
+  let basket = JSON.parse(localStorage.getItem("basket")) || []; // Persistent cart
+
+  // Dark mode toggle (integrates with CSS body.dark)
+  if (darkToggle) {
+    const isDark = localStorage.getItem("darkMode") === "true";
+    document.body.classList.toggle("dark", isDark);
+    darkToggle.textContent = isDark ? "☀️" : "🌙";
+
+    darkToggle.addEventListener("click", () => {
+      const currentDark = document.body.classList.contains("dark");
+      const newDark = !currentDark;
+      document.body.classList.toggle("dark", newDark);
+      darkToggle.textContent = newDark ? "☀️" : "🌙";
+      localStorage.setItem("darkMode", newDark);
+    });
+  }
+
+  // Load initial dark mode from storage
+  if (localStorage.getItem("darkMode") === "true") {
+    document.body.classList.add("dark");
+    if (darkToggle) darkToggle.textContent = "☀️";
+  }
+
+  // Toggle cart dropdown (uses CSS .show)
   if (cartIcon) {
-    cartIcon.addEventListener("click", () => {
-      cartModal.classList.toggle("hidden");
+    cartIcon.addEventListener("click", (e) => {
+      e.stopPropagation(); // Prevent nav clicks
+      cartDropdown.classList.toggle("show");
     });
   }
 
   if (closeCartBtn) {
-    closeCartBtn.addEventListener("click", () => {
-      cartModal.classList.add("hidden");
+    closeCartBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      cartDropdown.classList.remove("show");
     });
+  }
+
+  // Close on outside click
+  document.addEventListener("click", (e) => {
+    if (!cartIcon.contains(e.target) && !cartDropdown.contains(e.target)) {
+      cartDropdown.classList.remove("show");
+    }
+  });
+
+  // Update cart count badge
+  function updateCartBadge() {
+    if (cartCountElement) {
+      const count = basket.reduce((sum, item) => sum + item.qty, 0);
+      cartCountElement.textContent = count;
+    }
+  }
+
+  // Save basket to localStorage
+  function saveBasket() {
+    localStorage.setItem("basket", JSON.stringify(basket));
   }
 
   // Fetch products from Fake Store API
   async function fetchProducts() {
     try {
       const res = await fetch("https://fakestoreapi.com/products");
+      if (!res.ok) throw new Error(`API error: ${res.status}`);
       const products = await res.json();
-      console.log("Products fetched:", products); // Debug: Check if data loads
+      console.log("Products fetched:", products.length, "items");
       generateShop(products);
     } catch (err) {
       console.error("API fetch error:", err);
-      if (shop) shop.innerHTML = "<p class='text-red-500'>Failed to load products. Try again later.</p>";
+      if (shop) {
+        shop.innerHTML = `<div class="error-message">Failed to load products. Check your connection. (Error: ${err.message})</div>`;
+      }
     }
   }
 
-  // Generate product cards dynamically
+  // Generate dynamic product cards (uses .product-card CSS)
   function generateShop(products) {
-    if (!shop) return; // Safety net
+    if (!shop) return;
     shop.innerHTML = products
       .map((product) => {
+        const safeTitle = product.title.replace(/'/g, "\\'").replace(/"/g, '\\"');
+        const safeImage = product.image.replace(/'/g, "\\'").replace(/"/g, '\\"');
         return `
-          <div class="bg-white shadow rounded p-4 flex flex-col items-center">
-            <img src="${product.image}" alt="${product.title}" class="h-40 object-contain mb-2">
-            <h3 class="text-sm font-bold text-center mb-1">${product.title}</h3>
-            <p class="text-gray-500 text-sm mb-2">${product.category}</p>
-            <p class="font-semibold mb-2">$${product.price}</p>
-            <button onclick="addToCart(${product.id}, '${product.title.replace(/'/g, "\\'").replace(/"/g, '\\"')}', ${product.price}, '${product.image}')" 
-              class="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">
+          <div class="product-card" data-id="${product.id}" data-name="${product.title}" data-price="${product.price}" data-img="${product.image}">
+            <img src="${product.image}" alt="${product.title}">
+            <h3>${product.title}</h3>
+            <p class="category">${product.category}</p>
+            <p class="price">$${product.price.toFixed(2)}</p>
+            <button onclick="addToCart(${product.id}, '${safeTitle}', ${product.price}, '${safeImage}')" class="add-cart">
               Add to Cart
             </button>
           </div>
@@ -62,8 +116,9 @@ document.addEventListener("DOMContentLoaded", function() {
       .join("");
   }
 
-  // Add item to cart
-  window.addToCart = function(id, title, price, image) { // Make global for onclick (or use delegation—see below)
+  // Global functions for onclick (add, qty, remove—styled via CSS)
+  window.addToCart = function(id, title, price, image) {
+    console.log("Adding:", { id, title });
     let existingItem = basket.find((x) => x.id === id);
     if (existingItem) {
       existingItem.qty += 1;
@@ -71,69 +126,10 @@ document.addEventListener("DOMContentLoaded", function() {
       basket.push({ id, title, price, image, qty: 1 });
     }
     updateCart();
+    updateCartBadge();
+    saveBasket();
   };
 
-  // Update cart UI
-  function updateCart() {
-    if (!cartItemsContainer) return;
-    cartItemsContainer.innerHTML = basket
-      .map((item) => {
-        return `
-          <div class="flex items-center justify-between border-b py-2">
-            <img src="${item.image}" alt="${item.title}" class="h-12 w-12 object-contain">
-            <div class="flex-1 px-2">
-              <h4 class="text-sm font-semibold">${item.title}</h4>
-              <p class="text-gray-600">$${item.price}</p>
-              <div class="flex items-center space-x-2 mt-1">
-                <button onclick="decreaseQty(${item.id})" class="bg-gray-300 px-2 rounded">-</button>
-                <span>${item.qty}</span>
-                <button onclick="increaseQty(${item.id})" class="bg-gray-300 px-2 rounded">+</button>
-              </div>
-            </div>
-            <button onclick="removeFromCart(${item.id})" class="text-red-500 font-bold">X</button>
-          </div>
-        `;
-      })
-      .join("");
-
-    // Calculate total price
-    let total = basket.reduce((acc, item) => acc + item.price * item.qty, 0);
-    if (totalPriceElement) totalPriceElement.textContent = `$${total.toFixed(2)}`;
-  }
-
-  // Increase quantity
   window.increaseQty = function(id) {
     let item = basket.find((x) => x.id === id);
     if (item) {
-      item.qty += 1;
-      updateCart();
-    }
-  };
-
-  // Decrease quantity
-  window.decreaseQty = function(id) {
-    let item = basket.find((x) => x.id === id);
-    if (item && item.qty > 1) {
-      item.qty -= 1;
-    } else {
-      basket = basket.filter((x) => x.id !== id);
-    }
-    updateCart();
-  };
-
-  // Remove item completely
-  window.removeFromCart = function(id) {
-    basket = basket.filter((x) => x.id !== id);
-    updateCart();
-  };
-
-  // Load products on page load (now inside DOM ready)
-  fetchProducts();
-
-  // Bonus: Close modal on outside click (educational enhancement)
-  if (cartModal) {
-    cartModal.addEventListener("click", (e) => {
-      if (e.target === cartModal) cartModal.classList.add("hidden");
-    });
-  }
-});
