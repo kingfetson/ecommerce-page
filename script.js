@@ -1,5 +1,5 @@
 
-    // Your ENTIRE JS code, wrapped in DOMContentLoaded for safety
+    //  ENTIRE JS code, wrapped in DOMContentLoaded for safety
     document.addEventListener("DOMContentLoaded", function() {
       // Select elements (DOM is now ready—no nulls!)
       const shop = document.getElementById("shop");
