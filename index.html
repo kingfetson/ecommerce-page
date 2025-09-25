@@ -3,81 +3,286 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>E-commerce Product Page</title>
-  <link rel="stylesheet" href="style.css">
+  <title>ModernShop - Premium E-commerce Experience</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <div class="logo">🛒 MyShop</div>
-    <ul class="nav-links">
-      <li><a href="#home">Home</a></li>
-      <li><a href="#products">Products</a></li>
-      <li><a href="#about">About</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-    <div class="nav-actions">
-  <div class="cart-container">
-    <span id="cartCount">0</span> 🛍️
-    <div id="cartDropdown" class="cart-dropdown">
-      <h3>Your Cart</h3>
-      <div id="cartItems"></div>
-      <p id="cartTotal">Total: $0</p>
-    </div>
+  <!-- Loading Screen -->
+  <div id="loadingScreen" class="loading-screen">
+    <div class="loading-spinner"></div>
+    <p>Loading amazing products...</p>
   </div>
-  <button id="darkToggle">🌙</button>
-</div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <div class="nav-brand">
+        <span class="brand-icon">🛍️</span>
+        <span class="brand-text">ModernShop</span>
+      </div>
+      
+      <div class="nav-menu" id="navMenu">
+        <a href="#home" class="nav-link">Home</a>
+        <a href="#products" class="nav-link">Products</a>
+        <a href="#about" class="nav-link">About</a>
+        <a href="#contact" class="nav-link">Contact</a>
+      </div>
+
+      <div class="nav-actions">
+        <!-- Search -->
+        <div class="search-container">
+          <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
+          <button class="search-btn" id="searchBtn">🔍</button>
+        </div>
+
+        <!-- Wishlist -->
+        <button class="action-btn wishlist-btn" id="wishlistBtn" title="Wishlist">
+          <span class="icon">❤️</span>
+          <span class="badge hidden" id="wishlistBadge">0</span>
+        </button>
+
+        <!-- Cart -->
+        <button class="action-btn cart-btn" id="cartBtn" title="Shopping Cart">
+          <span class="icon">🛒</span>
+          <span class="badge hidden" id="cartBadge">0</span>
+        </button>
+
+        <!-- Dark Mode Toggle -->
+        <button class="action-btn theme-btn" id="themeBtn" title="Toggle Theme">
+          <span class="icon">🌙</span>
+        </button>
+
+        <!-- Mobile Menu Toggle -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
   </nav>
 
   <!-- Hero Section -->
   <header id="home" class="hero">
-    <h1>Welcome to MyShop</h1>
-    <p>Your one-stop shop for awesome products</p>
+    <div class="hero-content">
+      <h1 class="hero-title">Discover Amazing Products</h1>
+      <p class="hero-subtitle">Premium quality items at unbeatable prices</p>
+      <button class="cta-btn" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
+        Shop Now
+      </button>
+    </div>
+    <div class="hero-image">
+      <img src="https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Shopping" loading="lazy">
+    </div>
   </header>
 
-  <!-- Product Grid -->
-  <section class="products" id="products">
-    <h2>Featured Products</h2>
-    <div class="product-grid">
-      <div class="product-card" data-id="1" data-name="Running Shoes" data-price="50" data-img="https://source.unsplash.com/300x200/?shoes">
-        <img src="https://source.unsplash.com/300x200/?shoes" alt="Running Shoes">
-        <h3>Running Shoes</h3>
-        <p>$50.00</p>
-        <button class="add-cart">Add to Cart</button>
+  <!-- Filters Section -->
+  <section class="filters-section" id="filters">
+    <div class="container">
+      <div class="filters-container">
+        <div class="filter-group">
+          <label for="categoryFilter">Category:</label>
+          <select id="categoryFilter" class="filter-select">
+            <option value="">All Categories</option>
+          </select>
+        </div>
+        
+        <div class="filter-group">
+          <label for="sortFilter">Sort by:</label>
+          <select id="sortFilter" class="filter-select">
+            <option value="default">Default</option>
+            <option value="price-low">Price: Low to High</option>
+            <option value="price-high">Price: High to Low</option>
+            <option value="name">Name A-Z</option>
+            <option value="rating">Rating</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label for="priceRange">Max Price: $<span id="priceValue">200</span></label>
+          <input type="range" id="priceRange" min="0" max="200" value="200" class="price-slider">
+        </div>
       </div>
-      <div class="product-card" data-id="2" data-name="Smart Watch" data-price="120" data-img="https://source.unsplash.com/300x200/?watch">
-        <img src="https://source.unsplash.com/300x200/?watch" alt="Smart Watch">
-        <h3>Smart Watch</h3>
-        <p>$120.00</p>
-        <button class="add-cart">Add to Cart</button>
+    </div>
+  </section>
+
+  <!-- Products Section -->
+  <section class="products-section" id="products">
+    <div class="container">
+      <h2 class="section-title">Featured Products</h2>
+      
+      <!-- Product Grid -->
+      <div class="products-grid" id="productsGrid">
+        <!-- Products will be loaded here -->
       </div>
-      <div class="product-card" data-id="3" data-name="Headphones" data-price="80" data-img="https://source.unsplash.com/300x200/?headphones">
-        <img src="https://source.unsplash.com/300x200/?headphones" alt="Headphones">
-        <h3>Headphones</h3>
-        <p>$80.00</p>
-        <button class="add-cart">Add to Cart</button>
+
+      <!-- Load More Button -->
+      <div class="load-more-container">
+        <button class="load-more-btn" id="loadMoreBtn">Load More Products</button>
       </div>
     </div>
   </section>
 
   <!-- About Section -->
-  <section id="about" class="about">
-    <h2>About Us</h2>
-    <p>We bring you high-quality products at affordable prices. Shop with confidence!</p>
+  <section id="about" class="about-section">
+    <div class="container">
+      <h2 class="section-title">Why Choose ModernShop?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">🚚</div>
+          <h3>Free Shipping</h3>
+          <p>Free delivery on orders over $50</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h3>Secure Payment</h3>
+          <p>Your payment information is safe</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">↩️</div>
+          <h3>Easy Returns</h3>
+          <p>30-day return policy</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">⭐</div>
+          <h3>Quality Products</h3>
+          <p>Carefully curated items</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <!-- Contact Section -->
-  <section id="contact" class="contact">
-    <h2>Contact Us</h2>
-    <p>Email: support@myshop.com</p>
-    <p>Phone: +254 700 000 000</p>
+  <section id="contact" class="contact-section">
+    <div class="container">
+      <h2 class="section-title">Get in Touch</h2>
+      <div class="contact-content">
+        <div class="contact-info">
+          <div class="contact-item">
+            <span class="contact-icon">📧</span>
+            <span>support@modernshop.com</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📞</span>
+            <span>+1 (555) 123-4567</span>
+          </div>
+          <div class="contact-item">
+            <span class="contact-icon">📍</span>
+            <span>123 Shopping St, Commerce City</span>
+          </div>
+        </div>
+      </div>
+    </div>
   </section>
+
+  <!-- Cart Modal -->
+  <div class="modal hidden" id="cartModal">
+    <div class="modal-overlay" id="cartOverlay"></div>
+    <div class="modal-content cart-modal-content">
+      <div class="modal-header">
+        <h3>Shopping Cart</h3>
+        <button class="close-btn" id="closeCartBtn">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="cartItems" class="cart-items">
+          <div class="empty-cart">
+            <div class="empty-cart-icon">🛒</div>
+            <p>Your cart is empty</p>
+            <button class="continue-shopping-btn" onclick="document.getElementById('cartModal').classList.add('hidden')">Continue Shopping</button>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer cart-footer">
+        <div class="cart-total">
+          <span class="total-label">Total: </span>
+          <span class="total-amount" id="cartTotal">$0.00</span>
+        </div>
+        <div class="cart-actions">
+          <button class="btn btn-secondary" id="clearCartBtn">Clear Cart</button>
+          <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Wishlist Modal -->
+  <div class="modal hidden" id="wishlistModal">
+    <div class="modal-overlay" id="wishlistOverlay"></div>
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3>My Wishlist</h3>
+        <button class="close-btn" id="closeWishlistBtn">×</button>
+      </div>
+      <div class="modal-body">
+        <div id="wishlistItems" class="wishlist-items">
+          <div class="empty-wishlist">
+            <div class="empty-wishlist-icon">❤️</div>
+            <p>Your wishlist is empty</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Product Detail Modal -->
+  <div class="modal hidden" id="productModal">
+    <div class="modal-overlay" id="productOverlay"></div>
+    <div class="modal-content product-modal-content">
+      <button class="close-btn" id="closeProductBtn">×</button>
+      <div class="product-detail" id="productDetail">
+        <!-- Product details will be loaded here -->
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notifications -->
+  <div class="toast-container" id="toastContainer"></div>
 
   <!-- Footer -->
   <footer class="footer">
-    <p>&copy; 2025 MyShop. All rights reserved.</p>
+    <div class="container">
+      <div class="footer-content">
+        <div class="footer-section">
+          <h4>ModernShop</h4>
+          <p>Your trusted online shopping destination</p>
+        </div>
+        <div class="footer-section">
+          <h4>Quick Links</h4>
+          <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#products">Products</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Customer Service</h4>
+          <ul>
+            <li><a href="#">FAQ</a></li>
+            <li><a href="#">Shipping Info</a></li>
+            <li><a href="#">Returns</a></li>
+            <li><a href="#">Size Guide</a></li>
+          </ul>
+        </div>
+        <div class="footer-section">
+          <h4>Follow Us</h4>
+          <div class="social-links">
+            <a href="#" class="social-link">📘</a>
+            <a href="#" class="social-link">📷</a>
+            <a href="#" class="social-link">🐦</a>
+          </div>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 ModernShop. All rights reserved.</p>
+      </div>
+    </div>
   </footer>
 
-  <script src="script.js"></script>
+  <!-- Scripts -->
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>
