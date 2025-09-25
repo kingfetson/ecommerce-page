@@ -1,288 +1,295 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ModernShop - Premium E-commerce Experience</title>
-  <link rel="stylesheet" href="styles/main.css">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="https://public-frontend-cos.metadl.com/mgx/img/favicon.png" type="image/png">
+    <title>ShopHub - Your Premium E-commerce Store</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
+
 <body>
-  <!-- Loading Screen -->
-  <div id="loadingScreen" class="loading-screen">
-    <div class="loading-spinner"></div>
-    <p>Loading amazing products...</p>
-  </div>
+    <!-- Navigation Bar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>ShopHub</span>
+            </div>
+            
+            <ul class="nav-menu" id="nav-menu">
+                <li class="nav-item">
+                    <a href="#home" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#products" class="nav-link">Products</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#about" class="nav-link">About</a>
+                </li>
+                <li class="nav-item">
+                    <a href="#contact" class="nav-link">Contact</a>
+                </li>
+            </ul>
 
-  <!-- Navigation Bar -->
-  <nav class="navbar" id="navbar">
-    <div class="nav-container">
-      <div class="nav-brand">
-        <span class="brand-icon">🛍️</span>
-        <span class="brand-text">ModernShop</span>
-      </div>
-      
-      <div class="nav-menu" id="navMenu">
-        <a href="#home" class="nav-link">Home</a>
-        <a href="#products" class="nav-link">Products</a>
-        <a href="#about" class="nav-link">About</a>
-        <a href="#contact" class="nav-link">Contact</a>
-      </div>
-
-      <div class="nav-actions">
-        <!-- Search -->
-        <div class="search-container">
-          <input type="text" id="searchInput" placeholder="Search products..." class="search-input">
-          <button class="search-btn" id="searchBtn">🔍</button>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="theme-toggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <div class="cart-container">
+                    <button class="cart-btn" id="cart-btn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span class="cart-count" id="cart-count">0</span>
+                    </button>
+                    
+                    <div class="cart-dropdown" id="cart-dropdown">
+                        <div class="cart-header">
+                            <h3>Shopping Cart</h3>
+                        </div>
+                        <div class="cart-items" id="cart-items">
+                            <p class="empty-cart">Your cart is empty</p>
+                        </div>
+                        <div class="cart-footer">
+                            <div class="cart-total">
+                                <strong>Total: $<span id="cart-total">0.00</span></strong>
+                            </div>
+                            <button class="checkout-btn">Checkout</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hamburger" id="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </div>
         </div>
+    </nav>
 
-        <!-- Wishlist -->
-        <button class="action-btn wishlist-btn" id="wishlistBtn" title="Wishlist">
-          <span class="icon">❤️</span>
-          <span class="badge hidden" id="wishlistBadge">0</span>
-        </button>
-
-        <!-- Cart -->
-        <button class="action-btn cart-btn" id="cartBtn" title="Shopping Cart">
-          <span class="icon">🛒</span>
-          <span class="badge hidden" id="cartBadge">0</span>
-        </button>
-
-        <!-- Dark Mode Toggle -->
-        <button class="action-btn theme-btn" id="themeBtn" title="Toggle Theme">
-          <span class="icon">🌙</span>
-        </button>
-
-        <!-- Mobile Menu Toggle -->
-        <button class="mobile-menu-btn" id="mobileMenuBtn">
-          <span></span>
-          <span></span>
-          <span></span>
-        </button>
-      </div>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <header id="home" class="hero">
-    <div class="hero-content">
-      <h1 class="hero-title">Discover Amazing Products</h1>
-      <p class="hero-subtitle">Premium quality items at unbeatable prices</p>
-      <button class="cta-btn" onclick="document.getElementById('products').scrollIntoView({behavior: 'smooth'})">
-        Shop Now
-      </button>
-    </div>
-    <div class="hero-image">
-      <img src="https://images.pexels.com/photos/1082529/pexels-photo-1082529.jpeg?auto=compress&cs=tinysrgb&w=800" alt="Shopping" loading="lazy">
-    </div>
-  </header>
-
-  <!-- Filters Section -->
-  <section class="filters-section" id="filters">
-    <div class="container">
-      <div class="filters-container">
-        <div class="filter-group">
-          <label for="categoryFilter">Category:</label>
-          <select id="categoryFilter" class="filter-select">
-            <option value="">All Categories</option>
-          </select>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Welcome to ShopHub</h1>
+                <p class="hero-description">Discover premium products at unbeatable prices. Your one-stop destination for quality shopping.</p>
+                <a href="#products" class="cta-btn">Shop Now</a>
+            </div>
+            <div class="hero-image">
+                <i class="fas fa-shopping-cart hero-icon"></i>
+            </div>
         </div>
-        
-        <div class="filter-group">
-          <label for="sortFilter">Sort by:</label>
-          <select id="sortFilter" class="filter-select">
-            <option value="default">Default</option>
-            <option value="price-low">Price: Low to High</option>
-            <option value="price-high">Price: High to Low</option>
-            <option value="name">Name A-Z</option>
-            <option value="rating">Rating</option>
-          </select>
-        </div>
+    </section>
 
-        <div class="filter-group">
-          <label for="priceRange">Max Price: $<span id="priceValue">200</span></label>
-          <input type="range" id="priceRange" min="0" max="200" value="200" class="price-slider">
+    <!-- Product Grid -->
+    <section class="products" id="products">
+        <div class="container">
+            <h2 class="section-title">Featured Products</h2>
+            <div class="product-grid" id="product-grid">
+                <!-- Products will be dynamically generated -->
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-headphones"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Premium Wireless Headphones</h3>
+                        <p class="product-description">High-quality wireless headphones with noise cancellation and premium sound quality.</p>
+                        <div class="product-price">$199.99</div>
+                        <button class="add-to-cart-btn" data-product-id="1">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Smart Fitness Watch</h3>
+                        <p class="product-description">Advanced fitness tracker with heart rate monitoring and GPS functionality.</p>
+                        <div class="product-price">$299.99</div>
+                        <button class="add-to-cart-btn" data-product-id="2">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Professional Camera Lens</h3>
+                        <p class="product-description">High-performance camera lens perfect for professional photography.</p>
+                        <div class="product-price">$899.99</div>
+                        <button class="add-to-cart-btn" data-product-id="3">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-keyboard"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Gaming Mechanical Keyboard</h3>
+                        <p class="product-description">RGB backlit mechanical keyboard designed for gaming enthusiasts.</p>
+                        <div class="product-price">$149.99</div>
+                        <button class="add-to-cart-btn" data-product-id="4">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-charging-station"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Wireless Charging Pad</h3>
+                        <p class="product-description">Fast wireless charging pad compatible with all Qi-enabled devices.</p>
+                        <div class="product-price">$49.99</div>
+                        <button class="add-to-cart-btn" data-product-id="5">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+                
+                <div class="product-card">
+                    <div class="product-image">
+                        <i class="fas fa-volume-up"></i>
+                    </div>
+                    <div class="product-info">
+                        <h3 class="product-name">Bluetooth Speaker</h3>
+                        <p class="product-description">Portable Bluetooth speaker with 360-degree sound and waterproof design.</p>
+                        <div class="product-price">$79.99</div>
+                        <button class="add-to-cart-btn" data-product-id="6">
+                            <i class="fas fa-cart-plus"></i> Add to Cart
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Products Section -->
-  <section class="products-section" id="products">
-    <div class="container">
-      <h2 class="section-title">Featured Products</h2>
-      
-      <!-- Product Grid -->
-      <div class="products-grid" id="productsGrid">
-        <!-- Products will be loaded here -->
-      </div>
+    <!-- About Section -->
+    <section class="about" id="about">
+        <div class="container">
+            <h2 class="section-title">About ShopHub</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>At ShopHub, we're passionate about bringing you the finest selection of products at competitive prices. Founded in 2024, we've built our reputation on quality, reliability, and exceptional customer service.</p>
+                    <p>Our curated collection features everything from cutting-edge electronics to stylish accessories, all carefully selected to meet the highest standards of quality and value.</p>
+                </div>
+                <div class="about-features">
+                    <div class="feature">
+                        <i class="fas fa-shipping-fast"></i>
+                        <div>
+                            <h3>Fast Shipping</h3>
+                            <p>Free shipping on orders over $50</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-shield-alt"></i>
+                        <div>
+                            <h3>Secure Payment</h3>
+                            <p>100% secure payment processing</p>
+                        </div>
+                    </div>
+                    <div class="feature">
+                        <i class="fas fa-headset"></i>
+                        <div>
+                            <h3>24/7 Support</h3>
+                            <p>Round-the-clock customer support</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-      <!-- Load More Button -->
-      <div class="load-more-container">
-        <button class="load-more-btn" id="loadMoreBtn">Load More Products</button>
-      </div>
-    </div>
-  </section>
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <h2 class="section-title">Get in Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h3>Email</h3>
+                            <p><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="bccfc9ccccd3cec8fccfd4d3ccd4c9de92dfd3d1">[email&#160;protected]</a></p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-phone"></i>
+                        <div>
+                            <h3>Phone</h3>
+                            <p>+1 (555) 123-4567</p>
+                        </div>
+                    </div>
+                    <div class="contact-item">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h3>Address</h3>
+                            <p>123 Commerce Street<br>Business District, NY 10001</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form">
+                    <form id="contact-form">
+                        <input type="text" placeholder="Your Name" required>
+                        <input type="email" placeholder="Your Email" required>
+                        <textarea placeholder="Your Message" rows="5" required></textarea>
+                        <button type="submit">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- About Section -->
-  <section id="about" class="about-section">
-    <div class="container">
-      <h2 class="section-title">Why Choose ModernShop?</h2>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">🚚</div>
-          <h3>Free Shipping</h3>
-          <p>Free delivery on orders over $50</p>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>ShopHub</span>
+                    </div>
+                    <p>Your trusted e-commerce partner since 2024.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="#home">Home</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#about">About</a></li>
+                        <li><a href="#contact">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>Follow Us</h3>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 ShopHub. All rights reserved.</p>
+            </div>
         </div>
-        <div class="feature-card">
-          <div class="feature-icon">🔒</div>
-          <h3>Secure Payment</h3>
-          <p>Your payment information is safe</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">↩️</div>
-          <h3>Easy Returns</h3>
-          <p>30-day return policy</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">⭐</div>
-          <h3>Quality Products</h3>
-          <p>Carefully curated items</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </footer>
 
-  <!-- Contact Section -->
-  <section id="contact" class="contact-section">
-    <div class="container">
-      <h2 class="section-title">Get in Touch</h2>
-      <div class="contact-content">
-        <div class="contact-info">
-          <div class="contact-item">
-            <span class="contact-icon">📧</span>
-            <span>support@modernshop.com</span>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">📞</span>
-            <span>+1 (555) 123-4567</span>
-          </div>
-          <div class="contact-item">
-            <span class="contact-icon">📍</span>
-            <span>123 Shopping St, Commerce City</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Cart Modal -->
-  <div class="modal hidden" id="cartModal">
-    <div class="modal-overlay" id="cartOverlay"></div>
-    <div class="modal-content cart-modal-content">
-      <div class="modal-header">
-        <h3>Shopping Cart</h3>
-        <button class="close-btn" id="closeCartBtn">×</button>
-      </div>
-      <div class="modal-body">
-        <div id="cartItems" class="cart-items">
-          <div class="empty-cart">
-            <div class="empty-cart-icon">🛒</div>
-            <p>Your cart is empty</p>
-            <button class="continue-shopping-btn" onclick="document.getElementById('cartModal').classList.add('hidden')">Continue Shopping</button>
-          </div>
-        </div>
-      </div>
-      <div class="modal-footer cart-footer">
-        <div class="cart-total">
-          <span class="total-label">Total: </span>
-          <span class="total-amount" id="cartTotal">$0.00</span>
-        </div>
-        <div class="cart-actions">
-          <button class="btn btn-secondary" id="clearCartBtn">Clear Cart</button>
-          <button class="btn btn-primary" id="checkoutBtn">Checkout</button>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Wishlist Modal -->
-  <div class="modal hidden" id="wishlistModal">
-    <div class="modal-overlay" id="wishlistOverlay"></div>
-    <div class="modal-content">
-      <div class="modal-header">
-        <h3>My Wishlist</h3>
-        <button class="close-btn" id="closeWishlistBtn">×</button>
-      </div>
-      <div class="modal-body">
-        <div id="wishlistItems" class="wishlist-items">
-          <div class="empty-wishlist">
-            <div class="empty-wishlist-icon">❤️</div>
-            <p>Your wishlist is empty</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- Product Detail Modal -->
-  <div class="modal hidden" id="productModal">
-    <div class="modal-overlay" id="productOverlay"></div>
-    <div class="modal-content product-modal-content">
-      <button class="close-btn" id="closeProductBtn">×</button>
-      <div class="product-detail" id="productDetail">
-        <!-- Product details will be loaded here -->
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast Notifications -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <div class="footer-content">
-        <div class="footer-section">
-          <h4>ModernShop</h4>
-          <p>Your trusted online shopping destination</p>
-        </div>
-        <div class="footer-section">
-          <h4>Quick Links</h4>
-          <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#products">Products</a></li>
-            <li><a href="#about">About</a></li>
-            <li><a href="#contact">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4>Customer Service</h4>
-          <ul>
-            <li><a href="#">FAQ</a></li>
-            <li><a href="#">Shipping Info</a></li>
-            <li><a href="#">Returns</a></li>
-            <li><a href="#">Size Guide</a></li>
-          </ul>
-        </div>
-        <div class="footer-section">
-          <h4>Follow Us</h4>
-          <div class="social-links">
-            <a href="#" class="social-link">📘</a>
-            <a href="#" class="social-link">📷</a>
-            <a href="#" class="social-link">🐦</a>
-          </div>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 ModernShop. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
-
-  <!-- Scripts -->
-  <script type="module" src="js/main.js"></script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="./script.js"></script>
 </body>
+
 </html>
